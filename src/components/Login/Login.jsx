@@ -1,10 +1,12 @@
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth } from '../../firebase/firebase.init';
 
 const Login = () => {
     const [user, setUser] = useState(null)
     const provider = new GoogleAuthProvider()
+
+    const githubProvider = new GithubAuthProvider();
     
     const handleGoogleSingIn = () => {
         console.log("google sing in clicked");
@@ -30,12 +32,26 @@ const Login = () => {
             })
     }
 
+    const handleGithubSingIn =()=>{
+        signInWithPopup(auth,githubProvider)
+        .then(result=>{
+            console.log(result);
+            setUser(result.user)
+        })
+        .catch(error =>{
+            console.log(error);
+        })
+    }
+
     return (
         <div>
             <h2>Please login now</h2>
             {user ? 
                 <button onClick={handleSingOut}>Sign Out</button> :
+               <>
                 <button onClick={handleGoogleSingIn}>Sign in with Google</button>
+                <button onClick={handleGithubSingIn}>Sing in with Github</button>
+               </>
             }
 
           {
